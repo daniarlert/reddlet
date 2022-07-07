@@ -41,7 +41,18 @@ func main() {
 		log.Fatalf("error creating a new reddit client: %v\n", err)
 	}
 
-	reddit.GetSubredditTopPosts(client, "golang", 5)
+	threads, err := reddit.GetSubredditTopThreads(client, "AskReddit", 2)
+	if err != nil {
+		log.Fatalf("error while getting top subrredit posts: %v\n", err)
+	}
+
+	for _, t := range threads {
+		id := t.ID
+		_, err := reddit.GetPostWithComments(client, id, 7)
+		if err != nil {
+			log.Fatalf("error while getting reddit posts: %v\n", err)
+		}
+	}
 
 	// cmd.Execute()
 }
